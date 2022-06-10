@@ -1,0 +1,139 @@
+@import 'https://fonts.googleapis.com/css2?family=Dancing+Script&family=Roboto+Mono&display=swap';
+body {
+  background-color: #a9c;
+}
+
+.calculator {
+  font-family: "Roboto Mono", monospace;
+  border: solid;
+  display: flex;
+  flex-flow: column;
+  width: 330px;
+  margin: 50px auto 20px;
+}
+
+.buttons {
+  display: grid;
+  grid: repeat(5, 1fr)/repeat(4, 1fr);
+  justify-items: stretch;
+  height: 270px;
+  border: 5px solid;
+}
+
+button {
+  font-family: "Roboto Mono", monospace;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+#clear-one {
+  grid-column: 4/5;
+  grid-row: 1;
+}
+
+#equals {
+  grid-column: 4/5;
+  grid-row: 4/span 2;
+  background-color: #55f;
+  font-size: 2em;
+}
+
+#clear {
+  grid-column: 1/span 2;
+  grid-row: 1;
+  color: white;
+  background-color: #c24;
+}
+
+#divide {
+  order: 0;
+}
+
+#seven {
+  order: 1;
+}
+
+#eight {
+  order: 2;
+}
+
+#nine {
+  order: 3;
+}
+
+#multiply {
+  order: 4;
+}
+
+#four {
+  order: 5;
+}
+
+#five {
+  order: 6;
+}
+
+#six {
+  order: 7;
+}
+
+#subtract {
+  order: 8;
+}
+
+#one {
+  order: 9;
+}
+
+#two {
+  order: 10;
+}
+
+#three {
+  order: 11;
+}
+
+#decimal {
+  order: 12;
+}
+
+#zero {
+  order: 13;
+}
+
+#add {
+  order: 14;
+}
+
+#input {
+  text-align: left;
+  min-height: 30px;
+  border: solid blue;
+  color: #cf2;
+  overflow-wrap: break-word;
+}
+
+#display {
+  text-align: right;
+  color: white;
+  font-size: 1.2em;
+  border: solid red;
+  padding-bottom: 0;
+  overflow-wrap: break-word;
+}
+
+#screen {
+  background-color: #423;
+  border: 2px solid black;
+}
+
+footer {
+  font-family: "Dancing Script", cursive;
+  font-size: 1.4em;
+  text-align: center;
+}
+footer a {
+  text-decoration: none;
+  color: #a14;
+  font-weight: bold;
+}

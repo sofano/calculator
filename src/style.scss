@@ -1,0 +1,80 @@
+@import 'https://fonts.googleapis.com/css2?family=Dancing+Script&family=Roboto+Mono&display=swap';
+$numList : divide,seven,eight,nine,multiply,four,five,six,subtract,one,two,three,decimal,zero,add;
+$order : 0;
+body{
+  background-color : #a9c
+}
+.calculator{
+  font-family : 'Roboto Mono', monospace;
+  border : solid;
+  display: flex;
+  flex-flow: column ;
+  width : 330px;
+  margin: 50px auto 20px
+  
+}
+.buttons{
+  display : grid;
+  grid: repeat(5, 1fr)/repeat(4,1fr);
+  justify-items: stretch;
+  height : 270px;
+  border: 5px solid
+}
+button{
+  font-family : 'Roboto Mono', monospace;
+  font-weight : bold;
+  font-size: 1.5em;
+}
+
+#clear-one{
+  grid-column : 4 / 5;
+  grid-row : 1 ;
+}
+
+#equals{
+  grid-column : 4 / 5;
+  grid-row : 4/ span 2;
+  background-color : #55f;
+  font-size : 2em
+}
+#clear{
+  grid-column: 1 / span 2;
+  grid-row: 1;
+  color : white;
+  background-color : #c24
+}
+@each $num in $numList{
+  ##{$num}{
+    order : $order;
+  }
+    $order : $order + 1;
+}
+#input{
+  text-align: left;
+  min-height : 30px;
+  border :solid blue;
+  color: #cf2;
+  overflow-wrap: break-word
+}
+#display{
+  text-align: right;
+  color:white;
+  font-size : 1.2em;
+  border: solid red;
+  padding-bottom : 0;
+  overflow-wrap: break-word
+}
+#screen{
+  background-color: #423;
+  border :2px solid black
+}
+footer{
+  font-family: 'Dancing Script', cursive;
+  font-size : 1.4em;
+  text-align : center;
+  a{
+    text-decoration : none;
+    color : #a14;
+    font-weight : bold
+  }
+}

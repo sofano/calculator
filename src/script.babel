@@ -1,0 +1,227 @@
+ 
+class App extends React.Component{
+  constructor(props){
+    super(props);
+    this.state= {
+      output : '0',
+      input : [],
+      type : '',
+      result : false
+      
+    }
+    this.handleNumbers = this.handleNumbers.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+    this.handleDecimal = this.handleDecimal.bind(this);
+    this.checkType = this.checkType.bind(this);
+    this.handleOperators = this.handleOperators.bind(this);
+    this.handleEvaluate = this.handleEvaluate.bind(this);
+    this.handleResult = this.handleResult.bind(this)
+    
+  }
+    
+  handleNumbers(e){
+    this.checkType('number');
+    if(this.state.output == '0' || !this.state.output.match(/\d/g)){ 
+      this.setState({output : e.target.value});
+    }else{
+      this.setState(prev => ({ output : prev.output + e.target.value}));
+    }
+    }
+  
+  handleOperators(e){
+    
+    this.checkType('operator');
+    if(!this.state.input.length && this.state.type == ''){
+      if(e.target.value == '-'){
+        this.setState({
+          output : '-'
+        })
+      }else{
+        this.setState({
+          output: e.target.value,
+          type : ''
+        })
+      }
+    }else if(e.target.value == '-' && this.state.output.match(/^[-+x/]$/)){
+      this.setState(prev=>({
+        output : prev.output + '-'
+      }));
+    }else{
+      this.setState({
+      output : e.target.value
+    })}
+    
+    
+    
+  }
+  
+  handleClear(e){
+    if(e.target.value == "all"){
+      this.setState({
+        output : '0',
+        input : [],
+        type : ''
+      })
+    }else if(this.state.output.length == 1 ){
+      if(this.state.input.length== 0){
+        this.setState({
+          output : '0',
+          input : [],
+          type : ''
+        })
+      }else{
+        this.setState(prev=>({
+        output : prev.input.at(-1),
+        input : prev.input.slice(0,-1),
+        type : prev.input.at(-1).match(/\d/)?'number':'operator'
+      }));
+      }
+    }else{
+      this.setState(prev=>({ 
+        output : prev.output.slice(0,-1)
+      }))
+    }
+  }
+  
+  handleDecimal(){
+    this.checkType('number');
+    
+    if(!this.state.output.match(/\d/g)){
+      this.setState({
+        output : '0.'
+      });
+    }else if(!this.state.output.match(/\./g)){
+      this.setState(prev=>({
+        output : prev.output + '.'
+      }));
+    }
+  }
+  
+  handleEvaluate(){
+    this.checkType('operator');
+    this.setState({
+      result : true
+    });
+  }
+  
+  handleResult(val){
+    this.setState({
+      result : false,
+      output : val,
+      type : 'result'
+    })
+  }
+  
+  checkType =(type)=>{
+    if(this.state.type == ''){
+      this.setState({type : type});
+    }else if(this.state.type == 'result'){
+      if(type == 'number'){
+        this.setState({
+        type : 'number',
+        input : []
+      });
+      }else{
+        this.setState(prev=>({
+          type : 'operator',
+          input : [this.state.output]
+        }));
+      }
+    }else if(this.state.type != type){
+      this.setState(prev=>({
+        input : prev.input.concat(prev.output),
+        type : type
+      }));
+    }
+  }
+  
+  
+  render(){
+    return (
+      <div className="calculator">
+        <Output 
+          output={this.state.output}
+          formula = {this.state.input}
+          result = {this.state.result}
+          newFormula = {this.handleResult}
+          />
+        <Buttons 
+          numbers={this.handleNumbers}
+          decimal={this.handleDecimal}
+          delete = {this.handleClear}
+          operation = {this.handleOperators}
+          result ={this.handleEvaluate}
+                 
+          />
+      </div>
+    )
+  }
+}
+
+class Output extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      equals : ''
+    }
+    this.updateOutput = this.updateOutput.bind(this)
+  }
+  componentDidUpdate(props,state){
+    if(state.equals=='=')
+      this.setState({equals : ''});
+  }
+ 
+  updateOutput(log = this.props.formula){
+    if(this.props.result){
+      let res = log.map(it=>/.-$/.test(it)?[it[0],it[1]]:it)
+      .flat().join('').replace(/x/g,'*').replace(/--/g,'+');
+      this.setState({
+      equals : '='
+      });
+      this.props.newFormula(`${Math.round(eval(res)*100000)/100000}`);
+    }else{
+      return log
+    }
+     
+  }
+  
+  render(){
+    return (
+    <div id='screen'>
+      <div id="input">{this.updateOutput()} {this.state.equals}</div>
+      <div id="display">{this.props.output}</div>
+    </div>
+    )
+  }
+}
+
+class Buttons extends React.Component {
+  render() {
+    let numbers = ['zero','one','two','three','four','five','six','seven','eight','nine'];
+    return (
+      <div className="buttons">
+        {numbers.map((it, ind)=>
+                                <button  
+                                  id={it} 
+                                  onClick={this.props.numbers}
+                                  value={ind}
+                                  className='num'>{ind}</button>)}
+        <button 
+          id="decimal" 
+          className='num' 
+          onClick={this.props.decimal}>.</button>
+        <button id="equals" onClick={this.props.result}>=</button>
+        <button id="add" onClick={this.props.operation} value='+'>+</button>
+        <button id="subtract" onClick={this.props.operation} value='-'>-</button>
+        <button id="multiply" onClick={this.props.operation} value='x'>x</button>
+        <button id="divide" onClick={this.props.operation} value='/'>/</button>
+        <button id="clear" onClick={this.props.delete} value="all">AC</button>
+        <button id="clear-one" onClick={this.props.delete}>
+          <i className="fas fa-backspace"/></button>
+      </div>)
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById("app"));
+
+
